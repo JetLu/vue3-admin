@@ -4,10 +4,9 @@
       <div class="left">
         <div class="left-item">
           <div class="left-item-animation left-item-num">401</div>
-          <div class="left-item-animation left-item-title">{{ $t('message.noAccess.accessTitle') }}</div>
-          <div class="left-item-animation left-item-msg">{{ $t('message.noAccess.accessMsg') }}</div>
+          <div class="left-item-animation left-item-title">您未被授权，没有操作权限</div>
           <div class="left-item-animation left-item-btn">
-            <el-button type="primary" round @click="onSetAuth">{{ $t('message.noAccess.accessBtn') }}</el-button>
+            <el-button type="primary" round @click="onSetAuth">重新授权</el-button>
           </div>
         </div>
       </div>
@@ -20,13 +19,14 @@
 
 <script lang="ts">
   import { useRouter } from 'vue-router';
-  import { Session } from '@/utils/storage';
+  import localStorageUtil from '@utils/localStorage';
+
   export default {
     name: '401',
     setup() {
       const router = useRouter();
       const onSetAuth = () => {
-        Session.clear();
+        localStorageUtil.clear();
         router.push('/login');
       };
       return {

@@ -46,7 +46,6 @@ export interface ThemeConfigState {
     layout: string;
     isRequestRoutes: boolean;
     globalTitle: string;
-    globalViceTitle: string;
     globalI18n: string;
     globalComponentSize: string;
   };

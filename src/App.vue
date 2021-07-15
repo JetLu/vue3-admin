@@ -23,8 +23,9 @@
   import setIntroduction from '@/utils/setIconfont';
   import LockScreen from '@/layout/lockScreen/index.vue';
   import Setings from '@/layout/navBars/breadcrumb/setings.vue';
+
   export default defineComponent({
-    name: 'app',
+    name: 'App',
     components: { LockScreen, Setings },
     setup() {
       const { t } = useI18n();

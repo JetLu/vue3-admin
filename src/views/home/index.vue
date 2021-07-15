@@ -8,130 +8,36 @@
             <div class="home-card-first-right ml15">
               <div class="flex-margin">
                 <div class="home-card-first-right-title">
-                  {{ currentTime }}，{{ getUserInfos.userName === '' ? 'test' : getUserInfos.userName }}！
+                  {{ getUserInfos.userName === '' ? 'test' : getUserInfos.userName }}！
                 </div>
-                <div class="home-card-first-right-msg mt5">{{
-                  getUserInfos.userName === 'admin' ? '超级管理' : '普通用户'
-                }}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </el-col>
-      <el-col :sm="6" class="mb15" v-for="(v, k) in topCardItemList" :key="k">
-        <div class="home-card-item home-card-item-box" :style="{ background: v.color }">
-          <div class="home-card-item-flex">
-            <div class="home-card-item-title pb3">{{ v.title }}</div>
-            <div class="home-card-item-title-num pb6" :id="`titleNum${k + 1}`"></div>
-            <div class="home-card-item-tip pb3">{{ v.tip }}</div>
-            <div class="home-card-item-tip-num" :id="`tipNum${k + 1}`"></div>
-          </div>
-          <i :class="v.icon" :style="{ color: v.iconColor }"></i>
-        </div>
-      </el-col>
-    </el-row>
-    <el-row :gutter="15">
-      <el-col :xs="24" :sm="10" :md="10" :lg="8" :xl="8">
-        <el-card shadow="hover" :header="$t('message.card.title2')">
-          <div class="home-monitor">
-            <div class="flex-warp">
-              <div class="flex-warp-item" v-for="(v, k) in environmentList" :key="k">
-                <div class="flex-warp-item-box">
-                  <i :class="v.icon" :style="{ color: v.iconColor }"></i>
-                  <span class="pl5">{{ v.label }}</span>
-                  <div class="mt10">{{ v.value }}</div>
+                <div class="home-card-first-right-msg mt5">
+                  {{ getUserInfos.userName === 'admin' ? '超级管理' : '普通用户' }}
                 </div>
               </div>
             </div>
           </div>
-        </el-card>
-      </el-col>
-    </el-row>
-    <el-row :gutter="15">
-      <el-col :xs="24" :sm="14" :md="14" :lg="16" :xl="16" class="home-warning-media">
-        <el-card shadow="hover" :header="$t('message.card.title3')" class="home-warning-card">
-          <el-table :data="tableData.data" style="width: 100%" stripe>
-            <el-table-column prop="date" :label="$t('message.table.th1')"></el-table-column>
-            <el-table-column prop="name" :label="$t('message.table.th2')"></el-table-column>
-            <el-table-column prop="address" :label="$t('message.table.th3')"></el-table-column>
-          </el-table>
-        </el-card>
-      </el-col>
-      <el-col :xs="24" :sm="10" :md="10" :lg="8" :xl="8" class="home-dynamic-media">
-        <el-card shadow="hover" :header="$t('message.card.title4')">
-          <div class="home-dynamic">
-            <el-scrollbar>
-              <div class="home-dynamic-item" v-for="(v, k) in activitiesList" :key="k">
-                <div class="home-dynamic-item-left">
-                  <div class="home-dynamic-item-left-time1 mb5">{{ v.time1 }}</div>
-                  <div class="home-dynamic-item-left-time2">{{ v.time2 }}</div>
-                </div>
-                <div class="home-dynamic-item-line">
-                  <i class="iconfont icon-fangkuang"></i>
-                </div>
-                <div class="home-dynamic-item-right">
-                  <div class="home-dynamic-item-right-title mb5">
-                    <i class="el-icon-s-comment"></i>
-                    <span>{{ v.title }}</span>
-                  </div>
-                  <div class="home-dynamic-item-right-label">{{ v.label }}</div>
-                </div>
-              </div>
-            </el-scrollbar>
-          </div>
-        </el-card>
+        </div>
       </el-col>
     </el-row>
   </div>
 </template>
 
 <script lang="ts">
-  import { toRefs, reactive, onMounted, nextTick, computed, getCurrentInstance } from 'vue';
-  import { formatAxis } from '@/utils/formatTime';
+  import { computed } from 'vue';
   import { useStore } from '@/store/index';
-  import { topCardItemList, environmentList, activitiesList } from './mock';
 
   export default {
-    name: 'home',
+    name: 'Home',
     setup() {
       const store = useStore();
-      const state = reactive({
-        topCardItemList,
-        environmentList,
-        activitiesList,
-        tableData: {
-          data: [
-            {
-              date: '2016-05-02',
-              name: '1号实验室',
-              address: '烟感2.1%OBS/M'
-            },
-            {
-              date: '2016-05-04',
-              name: '2号实验室',
-              address: '温度30℃'
-            },
-            {
-              date: '2016-05-01',
-              name: '3号实验室',
-              address: '湿度57%RH'
-            }
-          ]
-        }
-      });
+
       // 获取用户信息 vuex
       const getUserInfos = computed(() => {
         return store.state.userInfos.userInfos;
       });
-      // 当前时间提示语
-      const currentTime = computed(() => {
-        return formatAxis(new Date());
-      });
 
       return {
-        getUserInfos,
-        currentTime,
-        ...toRefs(state)
+        getUserInfos
       };
     }
   };

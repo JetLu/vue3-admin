@@ -1,86 +1,173 @@
 <template>
   <div class="login-container">
-    <div class="login-logo">
-      <span>{{ getThemeConfig.globalViceTitle }}</span>
-    </div>
-    <div class="login-content" :class="{ 'login-content-mobile': tabsActiveName === 'mobile' }">
+    <div class="login-content">
       <div class="login-content-main">
-        <h4 class="login-content-title">{{ getThemeConfig.globalTitle }}后台模板</h4>
-        <el-tabs v-model="tabsActiveName" @tab-click="onTabsClick">
-          <el-tab-pane :label="$t('message.label.one1')" name="account" :disabled="tabsActiveName === 'account'">
-            <transition name="el-zoom-in-center">
-              <Account v-show="isTabPaneShow" />
-            </transition>
-          </el-tab-pane>
-          <el-tab-pane :label="$t('message.label.two2')" name="mobile" :disabled="tabsActiveName === 'mobile'">
-            <transition name="el-zoom-in-center">
-              <Mobile v-show="!isTabPaneShow" />
-            </transition>
-          </el-tab-pane>
-        </el-tabs>
-        <div class="mt10">
-          <el-button type="text" size="small">{{ $t('message.link.one3') }}</el-button>
-          <el-button type="text" size="small">{{ $t('message.link.two4') }}</el-button>
-        </div>
+        <el-form class="login-content-form">
+          <el-form-item>
+            <el-input
+              v-model="ruleForm.userName"
+              type="text"
+              placeholder="请输入用户名"
+              prefix-icon="el-icon-user"
+              clearable
+              autocomplete="off"
+            />
+          </el-form-item>
+          <el-form-item>
+            <el-input
+              v-model="ruleForm.password"
+              :type="isShowPassword ? 'text' : 'password'"
+              placeholder="请输入密码"
+              prefix-icon="el-icon-lock"
+              autocomplete="off"
+            >
+              <template #suffix>
+                <i
+                  class="iconfont el-input__icon login-content-password"
+                  :class="isShowPassword ? 'icon-yincangmima' : 'icon-xianshimima'"
+                  @click="isShowPassword = !isShowPassword"
+                >
+                </i>
+              </template>
+            </el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-row :gutter="15">
+              <el-col :span="16">
+                <el-input
+                  v-model="ruleForm.code"
+                  type="text"
+                  maxlength="4"
+                  placeholder="请输入验证码"
+                  prefix-icon="el-icon-position"
+                  clearable
+                  autocomplete="off"
+                />
+              </el-col>
+              <el-col :span="8">
+                <div class="login-content-code">
+                  <span class="login-content-code-img">1234</span>
+                </div>
+              </el-col>
+            </el-row>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" class="login-content-submit" round :loading="loading.signIn" @click="onSignIn">
+              <span>登 录</span>
+            </el-button>
+          </el-form-item>
+        </el-form>
       </div>
-    </div>
-    <div class="login-copyright">
-      <div class="mb5 login-copyright-company">{{ $t('message.copyright.one5') }}</div>
-      <div class="login-copyright-msg">{{ $t('message.copyright.two6') }}</div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-  import { toRefs, reactive, computed } from 'vue';
-  import Account from '@/views/login/component/account.vue';
-  import Mobile from '@/views/login/component/mobile.vue';
+  import { toRefs, reactive, defineComponent, getCurrentInstance } from 'vue';
+  import { useRoute, useRouter } from 'vue-router';
+  import { ElMessage } from 'element-plus';
+  import { initFrontEndControlRoutes } from '@/router/frontEnd';
+  import { initBackEndControlRoutes } from '@/router/backEnd';
   import { useStore } from '@/store/index';
-  export default {
-    name: 'login',
-    components: { Account, Mobile },
+  import { Session } from '@/utils/storage';
+
+  export default defineComponent({
+    name: 'Login',
     setup() {
+      const { proxy } = getCurrentInstance() as any;
       const store = useStore();
+      const route = useRoute();
+      const router = useRouter();
       const state = reactive({
-        tabsActiveName: 'account',
-        isTabPaneShow: true
+        isShowPassword: false,
+        ruleForm: {
+          userName: 'admin',
+          password: '123456',
+          code: '1234'
+        },
+        loading: {
+          signIn: false
+        }
       });
-      // 获取布局配置信息
-      const getThemeConfig = computed(() => {
-        return store.state.themeConfig.themeConfig;
-      });
-      // 切换密码、手机登录
-      const onTabsClick = () => {
-        state.isTabPaneShow = !state.isTabPaneShow;
+
+      // 登录
+      const onSignIn = async () => {
+        state.loading.signIn = true;
+        let defaultAuthPageList: Array<string> = [];
+        let defaultAuthBtnList: Array<string> = [];
+        // admin 页面权限标识，对应路由 meta.auth，用于控制路由的显示/隐藏
+        let adminAuthPageList: Array<string> = ['admin'];
+        // admin 按钮权限标识
+        let adminAuthBtnList: Array<string> = ['btn.add', 'btn.del', 'btn.edit', 'btn.link'];
+        // test 页面权限标识，对应路由 meta.auth，用于控制路由的显示/隐藏
+        let testAuthPageList: Array<string> = ['test'];
+        // test 按钮权限标识
+        let testAuthBtnList: Array<string> = ['btn.add', 'btn.link'];
+        // 不同用户模拟不同的用户权限
+        if (state.ruleForm.userName === 'admin') {
+          defaultAuthPageList = adminAuthPageList;
+          defaultAuthBtnList = adminAuthBtnList;
+        } else {
+          defaultAuthPageList = testAuthPageList;
+          defaultAuthBtnList = testAuthBtnList;
+        }
+        // 用户信息模拟数据
+        const userInfos = {
+          userName: state.ruleForm.userName,
+          photo:
+            state.ruleForm.userName === 'admin'
+              ? 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1813762643,1914315241&fm=26&gp=0.jpg'
+              : 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=317673774,2961727727&fm=26&gp=0.jpg',
+          time: new Date().getTime(),
+          authPageList: defaultAuthPageList,
+          authBtnList: defaultAuthBtnList
+        };
+        // 存储 token 到浏览器缓存
+        Session.set('token', Math.random().toString(36).substr(0));
+        // 存储用户信息到浏览器缓存
+        Session.set('userInfo', userInfos);
+        // 1、请注意执行顺序(存储用户信息到vuex)
+        store.dispatch('userInfos/setUserInfos', userInfos);
+        if (!store.state.themeConfig.themeConfig.isRequestRoutes) {
+          // 前端控制路由，2、请注意执行顺序
+          await initFrontEndControlRoutes();
+          signInSuccess();
+        } else {
+          // 模拟后端控制路由，isRequestRoutes 为 true，则开启后端控制路由
+          // 添加完动态路由，再进行 router 跳转，否则可能报错 No match found for location with path "/"
+          await initBackEndControlRoutes();
+          // 执行完 initBackEndControlRoutes，再执行 signInSuccess
+          signInSuccess();
+        }
+      };
+      // 登录成功后的跳转
+      const signInSuccess = () => {
+        // 登录成功，跳到转首页
+        // 添加完动态路由，再进行 router 跳转，否则可能报错 No match found for location with path "/"
+        // 如果是复制粘贴的路径，非首页/登录页，那么登录成功后重定向到对应的路径中
+        route.query?.redirect ? router.push(route.query.redirect) : router.push('/');
+        // 登录成功提示
+        setTimeout(() => {
+          // 关闭 loading
+          state.loading.signIn = true;
+          ElMessage.success('登录成功！');
+          // 修复防止退出登录再进入界面时，需要刷新样式才生效的问题，初始化布局样式等(登录的时候触发，目前方案)
+          proxy.mittBus.emit('onSignInClick');
+        }, 300);
       };
       return {
-        onTabsClick,
-        getThemeConfig,
+        onSignIn,
         ...toRefs(state)
       };
     }
-  };
+  });
 </script>
 
 <style scoped lang="scss">
   .login-container {
     width: 100%;
     height: 100%;
-    background: url('https://gitee.com/lyt-top/vue-next-admin-images/raw/master/login/bg-login.png') no-repeat;
     background-size: 100% 100%;
-    .login-logo {
-      position: absolute;
-      top: 30px;
-      left: 50%;
-      height: 50px;
-      display: flex;
-      align-items: center;
-      font-size: 20px;
-      color: var(--color-primary);
-      letter-spacing: 2px;
-      width: 90%;
-      transform: translateX(-50%);
-    }
     .login-content {
       width: 500px;
       padding: 20px;
@@ -89,7 +176,7 @@
       left: 50%;
       transform: translate(-50%, -50%) translate3d(0, 0, 0);
       background-color: rgba(255, 255, 255, 0.99);
-      border: 5px solid var(--color-primary-light-8);
+      // border: 5px solid var(--color-primary-light-8);
       border-radius: 4px;
       transition: height 0.2s linear;
       height: 480px;
@@ -98,34 +185,49 @@
       .login-content-main {
         margin: 0 auto;
         width: 80%;
-        .login-content-title {
-          color: #333;
-          font-weight: 500;
-          font-size: 22px;
-          text-align: center;
-          letter-spacing: 4px;
-          margin: 15px 0 30px;
-          white-space: nowrap;
+        .login-content-form {
+          margin-top: 20px;
+          .login-content-password {
+            display: inline-block;
+            width: 25px;
+            cursor: pointer;
+            &:hover {
+              color: #909399;
+            }
+          }
+          .login-content-code {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            .login-content-code-img {
+              width: 100%;
+              height: 40px;
+              line-height: 40px;
+              background-color: #ffffff;
+              border: 1px solid rgb(220, 223, 230);
+              color: #333;
+              font-size: 16px;
+              font-weight: 700;
+              letter-spacing: 5px;
+              text-indent: 5px;
+              text-align: center;
+              cursor: pointer;
+              transition: all ease 0.2s;
+              border-radius: 4px;
+              user-select: none;
+              &:hover {
+                border-color: #c0c4cc;
+                transition: all ease 0.2s;
+              }
+            }
+          }
+          .login-content-submit {
+            width: 100%;
+            letter-spacing: 2px;
+            font-weight: 300;
+            margin-top: 15px;
+          }
         }
-      }
-    }
-    .login-content-mobile {
-      height: 418px;
-    }
-    .login-copyright {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      bottom: 30px;
-      text-align: center;
-      color: white;
-      font-size: 12px;
-      opacity: 0.8;
-      .login-copyright-company {
-        white-space: nowrap;
-      }
-      .login-copyright-msg {
-        @extend .login-copyright-company;
       }
     }
   }

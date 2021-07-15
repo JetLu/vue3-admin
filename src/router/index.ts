@@ -1,10 +1,10 @@
-import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router';
+import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 import { store } from '@/store/index.ts';
 import { Session } from '@/utils/storage';
 import { NextLoading } from '@/utils/loading';
-import { staticRoutes, dynamicRoutes } from '@/router/route';
+import { dynamicRoutes } from '@/router/route';
 import { initFrontEndControlRoutes } from '@/router/frontEnd';
 import { initBackEndControlRoutes } from '@/router/backEnd';
 
@@ -14,8 +14,33 @@ import { initBackEndControlRoutes } from '@/router/backEnd';
  * @link 参考：https://next.router.vuejs.org/zh/api/#createrouter
  */
 const router = createRouter({
-  history: createWebHashHistory(),
-  routes: staticRoutes
+  history: createWebHistory(),
+  routes: [
+    {
+      path: '/login',
+      name: 'login',
+      component: () => import('@/views/login/index.vue'),
+      meta: {
+        title: '登陆'
+      }
+    },
+    {
+      path: '/404',
+      name: 'notFound',
+      component: () => import('@/views/error/404.vue'),
+      meta: {
+        title: '找不到此页面'
+      }
+    },
+    {
+      path: '/401',
+      name: 'noPower',
+      component: () => import('@/views/error/401.vue'),
+      meta: {
+        title: '没有权限'
+      }
+    }
+  ]
 });
 
 /**
