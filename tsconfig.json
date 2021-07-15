@@ -1,0 +1,41 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "node", //模块的解析策略
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true, //允许从没有设置默认导出的模块中默认导入
+    "strictFunctionTypes": false,
+    "jsx": "preserve",
+    "baseUrl": ".",
+    "types": ["vite/client"],
+    "lib": ["esnext", "dom", "dom.iterable", "scripthost"],
+    "paths": {
+      "@/*": ["src/*"],
+      "@public/*": ["public/*"],
+      "@components/*": ["src/components/*"],
+      "@views/*": ["src/views/*"],
+      "@styles/*": ["src/assets/styles/*"],
+      "@images/*": ["src/assets/images/*"],
+      "@utils/*": ["src/utils/*"],
+      "@mixins/*": ["src/mixins/*"],
+      "@api/*": ["src/api/*"]
+    },
+    "allowJs": true, //允许编译javascript文件
+    "checkJs": true, //报告.js文件中的错误。与allowJs一起使用
+    "sourceMap": false,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true, //是否允许把json文件当做模块进行解析
+    "noUnusedLocals": true, //若有未使用的局部变量则抛错
+    "noUnusedParameters": true, //若有未使用的参数则抛错
+    "experimentalDecorators": true,
+    "noImplicitAny": false, //类型为any时，是否需要发出警告，设置true，则不警告
+    "skipLibCheck": true,
+    "removeComments": true, //去掉注解
+    "typeRoots": ["./node_modules/@types/", "./types"]
+  },
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
+  "exclude": ["dist", "node_modules", "test", "**/*spec.ts"]
+}

@@ -1,0 +1,53 @@
+// 页面布局
+.lowcode-list-box {
+  height: 100%;
+  &-container {
+    height: 100%;
+    @include layout-padding();
+    // 页面search
+    .lowcode-search-container {
+      margin: 0;
+    }
+    .lowcode-list-box-content {
+      @include layout-con;
+    }
+  }
+}
+
+// 查询form表单
+.search-form {
+  .el-form-item {
+    margin-bottom: 12px;
+    .el-form-item__content {
+      width: 140px;
+    }
+  }
+  .form-item-button-container {
+    margin-right: 0;
+    .el-form-item__content {
+      width: 200px;
+    }
+  }
+}
+
+// 操作列样式
+.operation-list {
+  display: flex;
+  align-items: center;
+  .el-dropdown {
+    margin-right: 10px;
+    padding: 2px 4px;
+    &:last-child {
+      margin: 0;
+    }
+  }
+}
+
+.empty-data {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 100%;
+  @include border;
+}

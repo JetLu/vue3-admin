@@ -1,0 +1,154 @@
+@mixin layout-con {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+@mixin clearfix {
+  &:after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+}
+
+@mixin no-select {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+@mixin flex-box($height: 100%, $justifyContent: center, $enable-height: true) {
+  @if $enable-height {
+    height: $height;
+  }
+  display: flex;
+  align-items: center;
+  justify-content: $justifyContent;
+  @content;
+}
+
+@mixin flex-layout() {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+}
+
+@mixin img-style($width, $height) {
+  img {
+    width: $width;
+    height: $height;
+  }
+}
+
+@mixin background-color($backgroundColor: $background-color) {
+  background-color: $backgroundColor;
+}
+
+@mixin border($borderWidth: $border-width, $borderColor: $border-color, $enable-border: false) {
+  @if $enable-border {
+    border: $borderWidth solid $borderColor;
+  } @else {
+    border: $border;
+  }
+}
+
+@mixin border-bottom() {
+  border-bottom: $border-width solid $border-color;
+}
+
+@mixin border-top() {
+  border-top: $border-width solid $border-color;
+}
+
+@mixin border-left() {
+  border-left: $border-width solid $border-color;
+}
+
+@mixin border-right() {
+  border-right: $border-width solid $border-color;
+}
+
+@mixin box-shadow() {
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+}
+
+// RFS mixin
+@mixin rfs($values, $property: font-size) {
+  #{$property}: $values;
+}
+
+@mixin font-size($value) {
+  @include rfs($value);
+}
+
+@mixin layout-padding() {
+  @include rfs(16px 16px 0, padding);
+}
+
+@mixin padding($value) {
+  @include rfs($value, padding);
+}
+
+@mixin padding-top($value) {
+  @include rfs($value, padding-top);
+}
+
+@mixin padding-right($value) {
+  @include rfs($value, padding-right);
+}
+
+@mixin padding-bottom($value) {
+  @include rfs($value, padding-bottom);
+}
+
+@mixin padding-left($value) {
+  @include rfs($value, padding-left);
+}
+
+@mixin margin($value) {
+  @include rfs($value, margin);
+}
+
+@mixin margin-top($value) {
+  @include rfs($value, margin-top);
+}
+
+@mixin margin-right($value) {
+  @include rfs($value, margin-right);
+}
+
+@mixin margin-bottom($value) {
+  @include rfs($value, margin-bottom);
+}
+
+@mixin margin-left($value) {
+  @include rfs($value, margin-left);
+}
+
+@mixin text-align($value) {
+  @include rfs($value, text-align);
+}
+
+@mixin char-sub($maxWidth: 100%) {
+  max-width: $maxWidth;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-break: break-all;
+  @content;
+}
+
+@mixin el-scrollbar() {
+  .el-scrollbar {
+    height: 100%;
+    :v-deep(.el-scrollbar__wrap) {
+      overflow-x: hidden;
+      @content;
+    }
+  }
+}

@@ -1,0 +1,27 @@
+$prefix: 'admin';
+// body
+$background-color: #fff;
+
+// Font
+$font-size-sm: 14px;
+$font-size-lg: 16px;
+$font-color: #000;
+$font-weight-lighter: lighter;
+$font-weight-light: 300;
+$font-weight-normal: 400;
+$font-weight-bold: 700;
+$font-weight-bolder: bolder;
+
+// link
+$link-color: #1890ff;
+$link-hover-color: #40a9ff;
+
+// border
+$border-width: 1px;
+$border-radius-sm: 2px;
+$border-radius-base: 4px;
+$border-radius-lg: 8px;
+$border-color: #e8eaec;
+$border: $border-width solid $border-color;
+// 左侧宽度
+$layout-sider-width: 180px;
