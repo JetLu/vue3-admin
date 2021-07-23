@@ -2,7 +2,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 import { store } from '@/store/index.ts';
-import { Session } from '@/utils/storage';
+import localStorageUtil from '@utils/localStorage';
 import { NextLoading } from '@/utils/loading';
 import { dynamicRoutes } from '@/router/route';
 import { initFrontEndControlRoutes } from '@/router/frontEnd';
@@ -224,14 +224,14 @@ if (!isRequestRoutes) initFrontEndControlRoutes();
 router.beforeEach(async (to, from, next) => {
   NProgress.configure({ showSpinner: false });
   if (to.meta.title) NProgress.start();
-  const token = Session.get('token');
+  const token = localStorageUtil.getItem('token');
   if (to.path === '/login' && !token) {
     next();
     NProgress.done();
   } else {
     if (!token) {
       next(`/login?redirect=${to.path}`);
-      Session.clear();
+      localStorageUtil.clear();
       resetRoute();
       NProgress.done();
     } else if (token && to.path === '/login') {

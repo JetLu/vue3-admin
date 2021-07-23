@@ -4,45 +4,45 @@
     :class="{ 'layout-navbars-tagsview-shadow': getThemeConfig.layout === 'classic' }"
   >
     <el-scrollbar ref="scrollbarRef" @wheel.native.prevent="onHandleScroll">
-      <ul class="layout-navbars-tagsview-ul" :class="setTagsStyle" ref="tagsUlRef">
+      <ul ref="tagsUlRef" class="layout-navbars-tagsview-ul" :class="setTagsStyle">
         <li
           v-for="(v, k) in tagsViewList"
           :key="k"
-          class="layout-navbars-tagsview-ul-li"
-          :data-name="v.name"
-          :class="{ 'is-active': isActive(v.path) }"
-          @contextmenu.prevent="onContextmenu(v, $event)"
-          @click="onTagsClick(v, k)"
           :ref="
             el => {
               if (el) tagsRefs[k] = el;
             }
           "
+          class="layout-navbars-tagsview-ul-li"
+          :data-name="v.name"
+          :class="{ 'is-active': isActive(v.path) }"
+          @contextmenu.prevent="onContextmenu(v, $event)"
+          @click="onTagsClick(v, k)"
         >
-          <i class="iconfont icon-webicon318 layout-navbars-tagsview-ul-li-iconfont font14" v-if="isActive(v.path)"></i>
+          <i v-if="isActive(v.path)" class="iconfont icon-webicon318 layout-navbars-tagsview-ul-li-iconfont font14"></i>
           <i
+            v-if="!isActive(v.path) && getThemeConfig.isTagsviewIcon"
             class="layout-navbars-tagsview-ul-li-iconfont"
             :class="v.meta.icon"
-            v-if="!isActive(v.path) && getThemeConfig.isTagsviewIcon"
           ></i>
-          <span>{{ $t(v.meta.title) }}</span>
+          <span>{{ v.meta.title }}</span>
           <template v-if="isActive(v.path)">
             <i class="el-icon-refresh-right ml5" @click.stop="refreshCurrentTagsView(v.path)"></i>
             <i
-              class="el-icon-close layout-navbars-tagsview-ul-li-icon layout-icon-active"
               v-if="!v.meta.isAffix"
+              class="el-icon-close layout-navbars-tagsview-ul-li-icon layout-icon-active"
               @click.stop="closeCurrentTagsView(v.path)"
             ></i>
           </template>
           <i
-            class="el-icon-close layout-navbars-tagsview-ul-li-icon layout-icon-three"
             v-if="!v.meta.isAffix"
+            class="el-icon-close layout-navbars-tagsview-ul-li-icon layout-icon-three"
             @click.stop="closeCurrentTagsView(v.path)"
           ></i>
         </li>
       </ul>
     </el-scrollbar>
-    <Contextmenu :dropdown="dropdown" ref="contextmenuRef" @currentContextmenuClick="onCurrentContextmenuClick" />
+    <Contextmenu ref="contextmenuRef" :dropdown="dropdown" @currentContextmenuClick="onCurrentContextmenuClick" />
   </div>
 </template>
 
@@ -63,11 +63,12 @@
   import { useRoute, useRouter, onBeforeRouteUpdate } from 'vue-router';
   import screenfull from 'screenfull';
   import { useStore } from '@/store/index';
-  import { Session } from '@/utils/storage';
+  import localStorageUtil from '@utils/localStorage';
   import Sortable from 'sortablejs';
   import Contextmenu from '@/layout/navBars/tagsView/contextmenu.vue';
+
   export default {
-    name: 'layoutTagsView',
+    name: 'LayoutTagsView',
     components: { Contextmenu },
     setup() {
       const { proxy } = getCurrentInstance() as any;
@@ -96,25 +97,25 @@
       });
       // 存储 tagsViewList 到浏览器临时缓存中，页面刷新时，保留记录
       const addBrowserSetSession = (tagsViewList: Array<object>) => {
-        Session.set('tagsViewList', tagsViewList);
+        localStorageUtil.setItem('tagsViewList', tagsViewList);
       };
       // 获取 vuex 中的 tagsViewRoutes 列表
       const getTagsViewRoutes = () => {
         state.routePath = route.path;
         state.tagsViewList = [];
-        if (!store.state.themeConfig.themeConfig.isCacheTagsView) Session.remove('tagsViewList');
+        if (!store.state.themeConfig.themeConfig.isCacheTagsView) localStorageUtil.removeItem('tagsViewList');
         state.tagsViewRoutesList = store.state.tagsViewRoutes.tagsViewRoutes;
         initTagsView();
       };
       // vuex 中获取路由信息：如果是设置了固定的（isAffix），进行初始化显示
       const initTagsView = () => {
-        if (Session.get('tagsViewList') && store.state.themeConfig.themeConfig.isCacheTagsView) {
-          state.tagsViewList = Session.get('tagsViewList');
+        if (localStorageUtil.getItem('tagsViewList') && store.state.themeConfig.themeConfig.isCacheTagsView) {
+          state.tagsViewList = localStorageUtil.getItem('tagsViewList');
         } else {
           state.tagsViewRoutesList.map((v: any) => {
             if (v.meta.isAffix && !v.meta.isHide) state.tagsViewList.push({ ...v });
           });
-          addTagsView(route.path);
+          addTagsView(route.path, {});
         }
         // 初始化当前元素(li)的下标
         getTagsRefsIndex(route.path);

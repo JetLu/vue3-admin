@@ -1,14 +1,14 @@
 <template>
-  <el-aside class="layout-aside" :class="setCollapseWidth" v-if="clientWidth > 1000">
+  <el-aside v-if="clientWidth > 1000" class="layout-aside" :class="setCollapseWidth">
     <Logo v-if="setShowLogo" />
-    <el-scrollbar class="flex-auto" ref="layoutAsideScrollbarRef">
+    <el-scrollbar ref="layoutAsideScrollbarRef" class="flex-auto">
       <Vertical :menuList="menuList" :class="setCollapseWidth" />
     </el-scrollbar>
   </el-aside>
-  <el-drawer v-model="getThemeConfig.isCollapse" :with-header="false" direction="ltr" size="220px" v-else>
+  <el-drawer v-else v-model="getThemeConfig.isCollapse" :with-header="false" direction="ltr" size="220px">
     <el-aside class="layout-aside w100 h100">
       <Logo v-if="setShowLogo" />
-      <el-scrollbar class="flex-auto" ref="layoutAsideScrollbarRef">
+      <el-scrollbar ref="layoutAsideScrollbarRef" class="flex-auto">
         <Vertical :menuList="menuList" />
       </el-scrollbar>
     </el-aside>
@@ -20,8 +20,9 @@
   import { useStore } from '@/store/index';
   import Logo from '@/layout/logo/index.vue';
   import Vertical from '@/layout/navMenu/vertical.vue';
+
   export default {
-    name: 'layoutAside',
+    name: 'LayoutAside',
     components: { Logo, Vertical },
     setup() {
       const { proxy } = getCurrentInstance() as any;

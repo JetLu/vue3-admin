@@ -1,8 +1,8 @@
 <template>
   <el-main class="layout-main">
     <el-scrollbar
-      class="layout-scrollbar"
       ref="layoutScrollbarRef"
+      class="layout-scrollbar"
       :style="{
         minHeight: `calc(100vh - ${headerHeight}`,
         padding: currentRouteMeta.isLink && currentRouteMeta.isIframe ? 0 : '',
@@ -10,7 +10,6 @@
       }"
     >
       <LayoutParentView />
-      <Footer v-if="getThemeConfig.isFooter" />
     </el-scrollbar>
   </el-main>
 </template>
@@ -20,10 +19,10 @@
   import { useStore } from '@/store/index';
   import { useRoute } from 'vue-router';
   import LayoutParentView from '@/layout/routerView/parent.vue';
-  import Footer from '@/layout/footer/index.vue';
+
   export default defineComponent({
-    name: 'layoutMain',
-    components: { LayoutParentView, Footer },
+    name: 'LayoutMain',
+    components: { LayoutParentView },
     setup() {
       const { proxy } = getCurrentInstance() as any;
       const route = useRoute();

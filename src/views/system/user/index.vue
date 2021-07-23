@@ -2,27 +2,21 @@
   <div class="system-user-container">
     <el-card shadow="hover">
       <div class="system-user-search mb15">
-        <el-input
-          size="small"
-          placeholder="请输入用户名"
-          prefix-icon="el-icon-search"
-          style="max-width: 180px"
-        ></el-input>
+        <el-input size="small" placeholder="请输入用户名" prefix-icon="el-icon-search" style="max-width: 180px" />
         <el-button size="small" type="primary" class="ml10">查询</el-button>
       </div>
       <el-table :data="tableData.data" stripe style="width: 100%">
-        <el-table-column prop="num" label="ID" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="name" label="用户名" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="num" label="ID" show-overflow-tooltip />
+        <el-table-column prop="name" label="用户名" show-overflow-tooltip />
         <el-table-column label="头像" show-overflow-tooltip>
           <template #default="scope">
-            <el-image class="system-user-photo" :src="scope.row.photo" :preview-src-list="[scope.row.photo]">
-            </el-image>
+            <el-image class="system-user-photo" :src="scope.row.photo" :preview-src-list="[scope.row.photo]" />
           </template>
         </el-table-column>
-        <el-table-column prop="phone" label="手机" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="email" label="邮箱" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="sex" label="性别" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="time" label="加入时间" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="phone" label="手机" show-overflow-tooltip />
+        <el-table-column prop="email" label="邮箱" show-overflow-tooltip />
+        <el-table-column prop="sex" label="性别" show-overflow-tooltip />
+        <el-table-column prop="time" label="加入时间" show-overflow-tooltip />
         <el-table-column prop="path" label="操作" width="90">
           <template #default="scope">
             <el-button size="mini" type="text">修改</el-button>
@@ -31,8 +25,6 @@
         </el-table-column>
       </el-table>
       <el-pagination
-        @size-change="onHandleSizeChange"
-        @current-change="onHandleCurrentChange"
         class="mt15"
         :pager-count="5"
         :page-sizes="[10, 20, 30]"
@@ -41,8 +33,9 @@
         :page-size="tableData.param.pageSize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="tableData.total"
-      >
-      </el-pagination>
+        @size-change="onHandleSizeChange"
+        @current-change="onHandleCurrentChange"
+      />
     </el-card>
   </div>
 </template>
@@ -50,7 +43,7 @@
 <script lang="ts">
   import { toRefs, reactive, onMounted } from 'vue';
   export default {
-    name: 'systemUser',
+    name: 'SystemUser',
     setup() {
       const state: any = reactive({
         tableData: {

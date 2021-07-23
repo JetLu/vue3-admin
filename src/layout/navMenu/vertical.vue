@@ -8,20 +8,20 @@
     :collapse-transition="false"
   >
     <template v-for="val in menuLists">
-      <el-submenu :index="val.path" v-if="val.children && val.children.length > 0" :key="val.path">
+      <el-submenu v-if="val.children && val.children.length > 0" :key="val.path" :index="val.path">
         <template #title>
           <i :class="val.meta.icon ? val.meta.icon : ''"></i>
-          <span>{{ $t(val.meta.title) }}</span>
+          <span>{{ val.meta.title }}</span>
         </template>
         <SubItem :chil="val.children" />
       </el-submenu>
-      <el-menu-item :index="val.path" :key="val.path" v-else>
+      <el-menu-item v-else :key="val.path" :index="val.path">
         <i :class="val.meta.icon ? val.meta.icon : ''"></i>
-        <template #title v-if="!val.meta.isLink || (val.meta.isLink && val.meta.isIframe)">
-          <span>{{ $t(val.meta.title) }}</span>
+        <template v-if="!val.meta.isLink || (val.meta.isLink && val.meta.isIframe)" #title>
+          <span>{{ val.meta.title }}</span>
         </template>
-        <template #title v-else>
-          <a :href="val.meta.isLink" target="_blank">{{ $t(val.meta.title) }}</a></template
+        <template v-else #title>
+          <a :href="val.meta.isLink" target="_blank">{{ val.meta.title }}</a></template
         >
       </el-menu-item>
     </template>
@@ -33,8 +33,9 @@
   import { useRoute, onBeforeRouteUpdate } from 'vue-router';
   import { useStore } from '@/store/index';
   import SubItem from '@/layout/navMenu/subItem.vue';
+
   export default defineComponent({
-    name: 'navMenuVertical',
+    name: 'NavMenuVertical',
     components: { SubItem },
     props: {
       menuList: {

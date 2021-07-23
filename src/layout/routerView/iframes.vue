@@ -1,10 +1,10 @@
 <template>
   <div
+    v-loading="iframeLoading"
     class="layout-view-bg-white flex"
     :style="{ height: `calc(100vh - ${iframeHeight}`, border: 'none' }"
-    v-loading="iframeLoading"
   >
-    <iframe :src="iframeUrl" frameborder="0" height="100%" width="100%" id="iframe" v-show="!iframeLoading"></iframe>
+    <iframe v-show="!iframeLoading" id="iframe" :src="iframeUrl" frameborder="0" height="100%" width="100%"></iframe>
   </div>
 </template>
 
@@ -12,8 +12,9 @@
   import { defineComponent, reactive, toRefs, onMounted, nextTick, watch } from 'vue';
   import { useRoute } from 'vue-router';
   import { useStore } from '@/store/index';
+
   export default defineComponent({
-    name: 'layoutIfameView',
+    name: 'LayoutIfameView',
     setup() {
       const route = useRoute();
       const store = useStore();

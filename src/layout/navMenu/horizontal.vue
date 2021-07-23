@@ -1,24 +1,24 @@
 <template>
   <div class="el-menu-horizontal-warp">
-    <el-scrollbar @wheel.native.prevent="onElMenuHorizontalScroll" ref="elMenuHorizontalScrollRef">
+    <el-scrollbar ref="elMenuHorizontalScrollRef" @wheel.native.prevent="onElMenuHorizontalScroll">
       <el-menu router :default-active="defaultActive" background-color="transparent" mode="horizontal">
         <template v-for="val in menuLists">
-          <el-submenu :index="val.path" v-if="val.children && val.children.length > 0" :key="val.path">
+          <el-submenu v-if="val.children && val.children.length > 0" :key="val.path" :index="val.path">
             <template #title>
               <i :class="val.meta.icon ? val.meta.icon : ''"></i>
-              <span>{{ $t(val.meta.title) }}</span>
+              <span>{{ val.meta.title }}</span>
             </template>
             <SubItem :chil="val.children" />
           </el-submenu>
-          <el-menu-item :index="val.path" :key="val.path" v-else>
-            <template #title v-if="!val.meta.isLink || (val.meta.isLink && val.meta.isIframe)">
+          <el-menu-item v-else :key="val.path" :index="val.path">
+            <template v-if="!val.meta.isLink || (val.meta.isLink && val.meta.isIframe)" #title>
               <i :class="val.meta.icon ? val.meta.icon : ''"></i>
-              {{ $t(val.meta.title) }}
+              {{ val.meta.title }}
             </template>
-            <template #title v-else>
+            <template v-else #title>
               <a :href="val.meta.isLink" target="_blank">
                 <i :class="val.meta.icon ? val.meta.icon : ''"></i>
-                {{ $t(val.meta.title) }}
+                {{ val.meta.title }}
               </a>
             </template>
           </el-menu-item>
@@ -33,8 +33,9 @@
   import { useRoute, onBeforeRouteUpdate } from 'vue-router';
   import { useStore } from '@/store/index';
   import SubItem from '@/layout/navMenu/subItem.vue';
+
   export default defineComponent({
-    name: 'navMenuHorizontal',
+    name: 'NavMenuHorizontal',
     components: { SubItem },
     props: {
       menuList: {
@@ -92,10 +93,10 @@
         let currentData: any = {};
         filterRoutesFun(store.state.routesList.routesList).map((v, k) => {
           if (v.path === `/${currentPathSplit[1]}`) {
-            v['k'] = k;
-            currentData['item'] = [{ ...v }];
-            currentData['children'] = [{ ...v }];
-            if (v.children) currentData['children'] = v.children;
+            v.k = k;
+            currentData.item = [{ ...v }];
+            currentData.children = [{ ...v }];
+            if (v.children) currentData.children = v.children;
           }
         });
         return currentData;

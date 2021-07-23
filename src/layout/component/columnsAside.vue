@@ -5,33 +5,33 @@
         <li
           v-for="(v, k) in columnsAsideList"
           :key="k"
-          @click="onColumnsAsideMenuClick(v, k)"
           :ref="
             el => {
               if (el) columnsAsideOffsetTopRefs[k] = el;
             }
           "
           :class="{ 'layout-columns-active': liIndex === k }"
-          :title="$t(v.meta.title)"
+          :title="v.meta.title"
+          @click="onColumnsAsideMenuClick(v, k)"
         >
-          <div :class="setColumnsAsidelayout" v-if="!v.meta.isLink || (v.meta.isLink && v.meta.isIframe)">
+          <div v-if="!v.meta.isLink || (v.meta.isLink && v.meta.isIframe)" :class="setColumnsAsidelayout">
             <i :class="v.meta.icon"></i>
             <div class="columns-vertical-title font12">
               {{
-                $t(v.meta.title) && $t(v.meta.title).length >= 4
-                  ? $t(v.meta.title).substr(0, setColumnsAsidelayout === 'columns-vertical' ? 4 : 3)
-                  : $t(v.meta.title)
+                v.meta.title && v.meta.title.length >= 4
+                  ? v.meta.title.substr(0, setColumnsAsidelayout === 'columns-vertical' ? 4 : 3)
+                  : v.meta.title
               }}
             </div>
           </div>
-          <div :class="setColumnsAsidelayout" v-else>
+          <div v-else :class="setColumnsAsidelayout">
             <a :href="v.meta.isLink" target="_blank">
               <i :class="v.meta.icon"></i>
               <div class="columns-vertical-title font12">
                 {{
-                  $t(v.meta.title) && $t(v.meta.title).length >= 4
-                    ? $t(v.meta.title).substr(0, setColumnsAsidelayout === 'columns-vertical' ? 4 : 3)
-                    : $t(v.meta.title)
+                  v.meta.title && v.meta.title.length >= 4
+                    ? v.meta.title.substr(0, setColumnsAsidelayout === 'columns-vertical' ? 4 : 3)
+                    : v.meta.title
                 }}
               </div>
             </a>
@@ -47,8 +47,9 @@
   import { reactive, toRefs, ref, computed, onMounted, nextTick, getCurrentInstance, watch } from 'vue';
   import { useRoute, useRouter, onBeforeRouteUpdate } from 'vue-router';
   import { useStore } from '@/store/index';
+
   export default {
-    name: 'layoutColumnsAside',
+    name: 'LayoutColumnsAside',
     setup() {
       const columnsAsideOffsetTopRefs: any = ref([]);
       const columnsAsideActiveRef = ref();
@@ -96,16 +97,17 @@
         onColumnsAsideDown(resData.item[0].k);
         proxy.mittBus.emit('setSendColumnsChildren', resData);
       };
+
       // 传送当前子级数据到菜单中
       const setSendChildren = (path: string) => {
         const currentPathSplit = path.split('/');
         let currentData: any = {};
         state.columnsAsideList.map((v: any, k: number) => {
           if (v.path === `/${currentPathSplit[1]}`) {
-            v['k'] = k;
-            currentData['item'] = [{ ...v }];
-            currentData['children'] = [{ ...v }];
-            if (v.children) currentData['children'] = v.children;
+            v.k = k;
+            currentData.item = [{ ...v }];
+            currentData.children = [{ ...v }];
+            if (v.children) currentData.children = v.children;
           }
         });
         return currentData;

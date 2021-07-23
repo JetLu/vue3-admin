@@ -70,16 +70,6 @@
             color: #999;
           }
         }
-        .app-footer {
-          @include flex-box($height: 40px, $justifyContent: flex-end);
-          padding: 4px 10px;
-          .el-button {
-            font-size: 12px;
-          }
-          .cancel-button {
-            color: #f56c6c;
-          }
-        }
       }
     }
   }

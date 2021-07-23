@@ -8,13 +8,14 @@
 <script lang="ts">
   import { computed, onBeforeMount, onUnmounted, getCurrentInstance } from 'vue';
   import { useStore } from '@/store/index';
-  import { Local } from '@/utils/storage';
+  import localStorageUtil from '@utils/localStorage';
   import Defaults from '@/layout/main/defaults.vue';
   import Classic from '@/layout/main/classic.vue';
   import Transverse from '@/layout/main/transverse.vue';
   import Columns from '@/layout/main/columns.vue';
+
   export default {
-    name: 'layout',
+    name: 'Layout',
     components: { Defaults, Classic, Transverse, Columns },
     setup() {
       const { proxy } = getCurrentInstance() as any;
@@ -25,7 +26,7 @@
       });
       // 窗口大小改变时(适配移动端)
       const onLayoutResize = () => {
-        if (!Local.get('oldLayout')) Local.set('oldLayout', getThemeConfig.value.layout);
+        if (!localStorageUtil.getItem('oldLayout')) localStorageUtil.setItem('oldLayout', getThemeConfig.value.layout);
         const clientWidth = document.body.clientWidth;
         if (clientWidth < 1000) {
           getThemeConfig.value.isCollapse = false;
@@ -35,7 +36,9 @@
           });
         } else {
           proxy.mittBus.emit('layoutMobileResize', {
-            layout: Local.get('oldLayout') ? Local.get('oldLayout') : getThemeConfig.value.layout,
+            layout: localStorageUtil.getItem('oldLayout')
+              ? localStorageUtil.getItem('oldLayout')
+              : getThemeConfig.value.layout,
             clientWidth
           });
         }

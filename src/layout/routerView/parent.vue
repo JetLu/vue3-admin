@@ -23,8 +23,9 @@
   } from 'vue';
   import { useRoute } from 'vue-router';
   import { useStore } from '@/store/index';
+
   export default defineComponent({
-    name: 'layoutParentView',
+    name: 'LayoutParentView',
     setup() {
       const { proxy } = getCurrentInstance() as any;
       const route = useRoute();

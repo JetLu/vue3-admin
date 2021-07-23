@@ -3,7 +3,7 @@
     <ColumnsAside />
     <div class="layout-columns-warp">
       <Aside />
-      <el-container class="flex-center layout-backtop">
+      <el-container class="flex-center">
         <Header v-if="isFixedHeader" />
         <el-scrollbar>
           <Header v-if="!isFixedHeader" />
@@ -11,7 +11,6 @@
         </el-scrollbar>
       </el-container>
     </div>
-    <el-backtop target=".layout-backtop .el-scrollbar__wrap"></el-backtop>
   </el-container>
 </template>
 
@@ -22,8 +21,9 @@
   import Header from '@/layout/component/header.vue';
   import Main from '@/layout/component/main.vue';
   import ColumnsAside from '@/layout/component/columnsAside.vue';
+
   export default {
-    name: 'layoutColumns',
+    name: 'LayoutColumns',
     components: { Aside, Header, Main, ColumnsAside },
     setup() {
       const store = useStore();

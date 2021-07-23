@@ -10,19 +10,19 @@
         <el-breadcrumb-item v-for="(v, k) in breadcrumbList" :key="v.meta.title">
           <span v-if="k === breadcrumbList.length - 1" class="layout-navbars-breadcrumb-span">
             <i
+              v-if="getThemeConfig.isBreadcrumbIcon"
               :class="v.meta.icon"
               class="layout-navbars-breadcrumb-iconfont"
-              v-if="getThemeConfig.isBreadcrumbIcon"
             ></i
-            >{{ $t(v.meta.title) }}
+            >{{ v.meta.title }}
           </span>
           <a v-else @click.prevent="onBreadcrumbClick(v)">
             <i
+              v-if="getThemeConfig.isBreadcrumbIcon"
               :class="v.meta.icon"
               class="layout-navbars-breadcrumb-iconfont"
-              v-if="getThemeConfig.isBreadcrumbIcon"
             ></i
-            >{{ $t(v.meta.title) }}
+            >{{ v.meta.title }}
           </a>
         </el-breadcrumb-item>
       </transition-group>
@@ -34,8 +34,9 @@
   import { toRefs, reactive, computed, getCurrentInstance, onMounted } from 'vue';
   import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router';
   import { useStore } from '@/store/index';
+
   export default {
-    name: 'layoutBreadcrumb',
+    name: 'LayoutBreadcrumb',
     setup() {
       const { proxy } = getCurrentInstance() as any;
       const store = useStore();

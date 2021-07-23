@@ -1,6 +1,5 @@
 import { Module } from 'vuex';
-import { Session } from '@/utils/storage.ts';
-// 此处加上 `.ts` 后缀报错，具体原因不详
+import localStorageUtil from '@utils/localStorage';
 import { UserInfosState, RootStateTypes } from '@/store/interface/index';
 
 const userInfosModule: Module<UserInfosState, RootStateTypes> = {
@@ -20,7 +19,7 @@ const userInfosModule: Module<UserInfosState, RootStateTypes> = {
       if (data) {
         commit('getUserInfos', data);
       } else {
-        if (Session.get('userInfo')) commit('getUserInfos', Session.get('userInfo'));
+        if (localStorageUtil.getItem('userInfo')) commit('getUserInfos', localStorageUtil.getItem('userInfo'));
       }
     }
   }

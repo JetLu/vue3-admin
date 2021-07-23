@@ -10,8 +10,9 @@
   import { defineComponent, toRefs, reactive, onMounted } from 'vue';
   import { useRoute } from 'vue-router';
   import { useStore } from '@/store/index';
+
   export default defineComponent({
-    name: 'layoutLinkView',
+    name: 'LayoutLinkView',
     setup() {
       const route = useRoute();
       const store = useStore();

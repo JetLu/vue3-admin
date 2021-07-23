@@ -2,7 +2,7 @@
   <div class="layout-navbars-breadcrumb-index">
     <Logo v-if="setIsShowLogo" />
     <Breadcrumb />
-    <Horizontal :menuList="menuList" v-if="isLayoutTransverse" />
+    <Horizontal v-if="isLayoutTransverse" :menuList="menuList" />
     <User />
   </div>
 </template>
@@ -15,8 +15,9 @@
   import User from '@/layout/navBars/breadcrumb/user.vue';
   import Logo from '@/layout/logo/index.vue';
   import Horizontal from '@/layout/navMenu/horizontal.vue';
+
   export default {
-    name: 'layoutBreadcrumbIndex',
+    name: 'LayoutBreadcrumbIndex',
     components: { Breadcrumb, User, Logo, Horizontal },
     setup() {
       const { proxy } = getCurrentInstance() as any;
@@ -52,7 +53,7 @@
       };
       // 设置了分割菜单时，删除底下 children
       const delClassicChildren = (arr: Array<object>) => {
-        arr.map((v: any) => {
+        arr.forEach((v: any) => {
           if (v.children) delete v.children;
         });
         return arr;
@@ -73,10 +74,10 @@
         let currentData: any = {};
         filterRoutesFun(store.state.routesList.routesList).map((v, k) => {
           if (v.path === `/${currentPathSplit[1]}`) {
-            v['k'] = k;
-            currentData['item'] = [{ ...v }];
-            currentData['children'] = [{ ...v }];
-            if (v.children) currentData['children'] = v.children;
+            v.k = k;
+            currentData.item = [{ ...v }];
+            currentData.children = [{ ...v }];
+            if (v.children) currentData.children = v.children;
           }
         });
         return currentData;

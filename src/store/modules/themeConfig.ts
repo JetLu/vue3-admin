@@ -91,8 +91,6 @@ const themeConfigModule: Module<ThemeConfigState, RootStateTypes> = {
       isCacheTagsView: false,
       // 是否开启 TagsView 拖拽
       isSortableTagsView: true,
-      // 是否开启 Footer 底部版权信息
-      isFooter: false,
       // 是否开启灰色模式
       isGrayscale: false,
       // 是否开启色弱模式
@@ -133,8 +131,6 @@ const themeConfigModule: Module<ThemeConfigState, RootStateTypes> = {
        */
       // 网站主标题（菜单导航、浏览器当前网页标题）
       globalTitle: '低代码平台',
-      // 默认初始语言，可选值"<zh-cn|en|zh-tw>"，默认 zh-cn
-      globalI18n: 'zh-cn',
       // 默认全局组件大小，可选值"<|medium|small|mini>"，默认 ''
       globalComponentSize: ''
     }

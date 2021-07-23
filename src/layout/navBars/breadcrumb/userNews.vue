@@ -1,12 +1,12 @@
 <template>
   <div class="layout-navbars-breadcrumb-user-news">
     <div class="head-box">
-      <div class="head-box-title">{{ $t('message.user.newTitle') }}</div>
-      <div class="head-box-btn" v-if="newsList.length > 0" @click="onAllReadClick">{{ $t('message.user.newBtn') }}</div>
+      <div class="head-box-title">通知</div>
+      <div v-if="newsList.length > 0" class="head-box-btn" @click="onAllReadClick">全部已读</div>
     </div>
     <div class="content-box">
       <template v-if="newsList.length > 0">
-        <div class="content-box-item" v-for="(v, k) in newsList" :key="k">
+        <div v-for="(v, k) in newsList" :key="k" class="content-box-item">
           <div>{{ v.label }}</div>
           <div class="content-box-msg">
             {{ v.value }}
@@ -14,16 +14,17 @@
           <div class="content-box-time">{{ v.time }}</div>
         </div>
       </template>
-      <el-empty :description="$t('message.user.newDesc')" v-else></el-empty>
+      <el-empty v-else description="暂无通知" />
     </div>
-    <div class="foot-box" @click="onGoToGiteeClick" v-if="newsList.length > 0">{{ $t('message.user.newGo') }}</div>
+    <div v-if="newsList.length > 0" class="foot-box" @click="onGoToGiteeClick">前往通知中心</div>
   </div>
 </template>
 
 <script lang="ts">
   import { reactive, toRefs } from 'vue';
+
   export default {
-    name: 'layoutBreadcrumbUserNews',
+    name: 'LayoutBreadcrumbUserNews',
     setup() {
       const state = reactive({
         newsList: [

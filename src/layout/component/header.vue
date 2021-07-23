@@ -8,8 +8,9 @@
   import { computed } from 'vue';
   import { useStore } from '@/store/index';
   import NavBarsIndex from '@/layout/navBars/index.vue';
+
   export default {
-    name: 'layoutHeader',
+    name: 'LayoutHeader',
     components: { NavBarsIndex },
     setup() {
       const store = useStore();

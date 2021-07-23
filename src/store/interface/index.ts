@@ -34,7 +34,6 @@ export interface ThemeConfigState {
     isTagsviewIcon: boolean;
     isCacheTagsView: boolean;
     isSortableTagsView: boolean;
-    isFooter: boolean;
     isGrayscale: boolean;
     isInvert: boolean;
     isWartermark: boolean;
@@ -46,7 +45,6 @@ export interface ThemeConfigState {
     layout: string;
     isRequestRoutes: boolean;
     globalTitle: string;
-    globalI18n: string;
     globalComponentSize: string;
   };
 }

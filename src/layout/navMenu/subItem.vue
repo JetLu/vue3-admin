@@ -1,21 +1,21 @@
 <template>
   <template v-for="val in chils">
-    <el-submenu :index="val.path" :key="val.path" v-if="val.children && val.children.length > 0">
+    <el-submenu v-if="val.children && val.children.length > 0" :key="val.path" :index="val.path">
       <template #title>
         <i :class="val.meta.icon"></i>
-        <span>{{ $t(val.meta.title) }}</span>
+        <span>{{ val.meta.title }}</span>
       </template>
       <sub-item :chil="val.children" />
     </el-submenu>
-    <el-menu-item :index="val.path" :key="val.path" v-else>
+    <el-menu-item v-else :key="val.path" :index="val.path">
       <template v-if="!val.meta.isLink || (val.meta.isLink && val.meta.isIframe)">
         <i :class="val.meta.icon ? val.meta.icon : ''"></i>
-        <span>{{ $t(val.meta.title) }}</span>
+        <span>{{ val.meta.title }}</span>
       </template>
       <template v-else>
         <a :href="val.meta.isLink" target="_blank">
           <i :class="val.meta.icon ? val.meta.icon : ''"></i>
-          {{ $t(val.meta.title) }}
+          {{ val.meta.title }}
         </a>
       </template>
     </el-menu-item>
@@ -24,8 +24,9 @@
 
 <script lang="ts">
   import { computed, defineComponent } from 'vue';
+
   export default defineComponent({
-    name: 'navMenuSubItem',
+    name: 'NavMenuSubItem',
     props: {
       chil: {
         type: Array,

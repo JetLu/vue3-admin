@@ -2,16 +2,16 @@
   <div class="layout-search-dialog">
     <el-dialog v-model="isShowSearch" width="300px" destroy-on-close :modal="false" fullscreen :show-close="false">
       <el-autocomplete
+        ref="layoutMenuAutocompleteRef"
         v-model="menuQuery"
         :fetch-suggestions="menuSearch"
-        :placeholder="$t('message.user.searchPlaceholder')"
+        placeholder="菜单搜索：支持中文、路由路径"
         prefix-icon="el-icon-search"
-        ref="layoutMenuAutocompleteRef"
         @select="onHandleSelect"
         @blur="onSearchBlur"
       >
         <template #default="{ item }">
-          <div><i :class="item.meta.icon" class="mr10"></i>{{ $t(item.meta.title) }}</div>
+          <div><i :class="item.meta.icon" class="mr10"></i>{{ item.meta.title }}</div>
         </template>
       </el-autocomplete>
     </el-dialog>
@@ -21,13 +21,12 @@
 <script lang="ts">
   import { reactive, toRefs, defineComponent, ref, nextTick } from 'vue';
   import { useRouter } from 'vue-router';
-  import { useI18n } from 'vue-i18n';
   import { useStore } from '@/store/index';
+
   export default defineComponent({
-    name: 'layoutBreadcrumbSearch',
+    name: 'LayoutBreadcrumbSearch',
     setup() {
       const layoutMenuAutocompleteRef = ref();
-      const { t } = useI18n();
       const store = useStore();
       const router = useRouter();
       const state: any = reactive({
@@ -59,7 +58,7 @@
           return (
             restaurant.path.toLowerCase().indexOf(queryString.toLowerCase()) > -1 ||
             restaurant.meta.title.toLowerCase().indexOf(queryString.toLowerCase()) > -1 ||
-            t(restaurant.meta.title).indexOf(queryString.toLowerCase()) > -1
+            restaurant.meta.title.indexOf(queryString.toLowerCase()) > -1
           );
         };
       };

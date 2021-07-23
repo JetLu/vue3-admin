@@ -3,12 +3,11 @@
     <Header />
     <el-container class="layout-mian-height-50">
       <Aside />
-      <div class="flex-center layout-backtop">
+      <div class="flex-center">
         <TagsView v-if="getThemeConfig.isTagsview" />
         <Main />
       </div>
     </el-container>
-    <el-backtop target=".layout-backtop .el-main .el-scrollbar__wrap"></el-backtop>
   </el-container>
 </template>
 
@@ -20,7 +19,7 @@
   import Main from '@/layout/component/main.vue';
   import TagsView from '@/layout/navBars/tagsView/tagsView.vue';
   export default {
-    name: 'layoutClassic',
+    name: 'LayoutClassic',
     components: { Aside, Header, Main, TagsView },
     setup() {
       const store = useStore();

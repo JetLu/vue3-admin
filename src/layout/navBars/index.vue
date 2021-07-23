@@ -10,8 +10,9 @@
   import { useStore } from '@/store/index';
   import BreadcrumbIndex from '@/layout/navBars/breadcrumb/index.vue';
   import TagsView from '@/layout/navBars/tagsView/tagsView.vue';
+
   export default {
-    name: 'layoutNavBars',
+    name: 'LayoutNavBars',
     components: { BreadcrumbIndex, TagsView },
     setup() {
       const store = useStore();

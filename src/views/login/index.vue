@@ -69,7 +69,7 @@
   import { initFrontEndControlRoutes } from '@/router/frontEnd';
   import { initBackEndControlRoutes } from '@/router/backEnd';
   import { useStore } from '@/store/index';
-  import { Session } from '@/utils/storage';
+  import localStorageUtil from '@utils/localStorage';
 
   export default defineComponent({
     name: 'Login',
@@ -111,21 +111,19 @@
           defaultAuthPageList = testAuthPageList;
           defaultAuthBtnList = testAuthBtnList;
         }
+
         // 用户信息模拟数据
         const userInfos = {
           userName: state.ruleForm.userName,
-          photo:
-            state.ruleForm.userName === 'admin'
-              ? 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1813762643,1914315241&fm=26&gp=0.jpg'
-              : 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=317673774,2961727727&fm=26&gp=0.jpg',
+          photo: 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1813762643,1914315241&fm=26&gp=0.jpg',
           time: new Date().getTime(),
           authPageList: defaultAuthPageList,
           authBtnList: defaultAuthBtnList
         };
         // 存储 token 到浏览器缓存
-        Session.set('token', Math.random().toString(36).substr(0));
+        localStorageUtil.setItem('token', Math.random().toString(36).substr(0));
         // 存储用户信息到浏览器缓存
-        Session.set('userInfo', userInfos);
+        localStorageUtil.setItem('userInfo', userInfos);
         // 1、请注意执行顺序(存储用户信息到vuex)
         store.dispatch('userInfos/setUserInfos', userInfos);
         if (!store.state.themeConfig.themeConfig.isRequestRoutes) {
@@ -140,12 +138,13 @@
           signInSuccess();
         }
       };
+
       // 登录成功后的跳转
       const signInSuccess = () => {
         // 登录成功，跳到转首页
         // 添加完动态路由，再进行 router 跳转，否则可能报错 No match found for location with path "/"
         // 如果是复制粘贴的路径，非首页/登录页，那么登录成功后重定向到对应的路径中
-        route.query?.redirect ? router.push(route.query.redirect) : router.push('/');
+        route.query?.redirect ? router.push(route.query.redirect as string) : router.push('/');
         // 登录成功提示
         setTimeout(() => {
           // 关闭 loading
@@ -155,6 +154,7 @@
           proxy.mittBus.emit('onSignInClick');
         }, 300);
       };
+
       return {
         onSignIn,
         ...toRefs(state)

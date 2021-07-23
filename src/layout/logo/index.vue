@@ -1,12 +1,12 @@
 <template>
-  <div class="layout-logo" v-if="setShowLogo" @click="onThemeConfigChange">
+  <div v-if="setShowLogo" class="layout-logo" @click="onThemeConfigChange">
     <img
       src="https://gitee.com/lyt-top/vue-next-admin-images/raw/master/logo/logo-mini.svg"
       class="layout-logo-medium-img"
     />
     <span>{{ getThemeConfig.globalTitle }}</span>
   </div>
-  <div class="layout-logo-size" v-else @click="onThemeConfigChange">
+  <div v-else class="layout-logo-size" @click="onThemeConfigChange">
     <img
       src="https://gitee.com/lyt-top/vue-next-admin-images/raw/master/logo/logo-mini.svg"
       class="layout-logo-size-img"
@@ -17,8 +17,9 @@
 <script lang="ts">
   import { computed, getCurrentInstance } from 'vue';
   import { useStore } from '@/store/index';
+
   export default {
-    name: 'layoutLogo',
+    name: 'LayoutLogo',
     setup() {
       const { proxy } = getCurrentInstance() as any;
       const store = useStore();
